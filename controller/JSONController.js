@@ -1,7 +1,6 @@
 import fs from "fs"
 import FetchHandler from "../api/ExRate.js";
 import _ from "lodash";
-
 const FH = new FetchHandler()
 
 export default class JSONController {
@@ -24,7 +23,6 @@ export default class JSONController {
             await FH.GetCurrencyBasedOn("GBP"),
             await FH.GetCurrencyBasedOn("CHF"),
             await FH.GetCurrencyBasedOn("CNY"),
-
         ]
 
         try {
@@ -46,13 +44,19 @@ export default class JSONController {
     */
     ReadParsedJson() {
         try {
-            this.#P_Curr = JSON.parse(fs.readFileSync("./json/ExRate.json", "utf8", (err, text) => {
-                if (err) {
-                    console.error("1 Ошибка при чтении файла ExRate.\n", err)
-                    return
-                }
-                return text
-            }))
+            if (!fs.existsSync("./json/ExRate.json")) {
+                this.WriteParsedJson()
+            }
+            else {
+                this.#P_Curr = JSON.parse(fs.readFileSync("./json/ExRate.json", "utf8", (err, text) => {
+                    if (err) {
+                        console.error("1 Ошибка при чтении файла ExRate.\n", err)
+                        return
+                    }
+                    return text
+                }))
+
+            }
             return this.#P_Curr
         } catch (err) {
             console.error("2 Ошибка при чтении файла ExRate.\n", err)

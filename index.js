@@ -21,7 +21,7 @@ try {
 
     //HEARS START
     bot.hears("Курс валют", async (ctx) => {
-        await ctx.reply("Выберите тип валюты 💶:", Markup.inlineKeyboard(_.chunk(Object.keys(JC.ReadParsedJson()[0].rates).map(e => {
+        await ctx.reply("Выберите тип валюты 💶:", Markup.inlineKeyboard(_.chunk(Object.keys(JC.ReadParsedJson()?.[0]?.rates || []).map(e => {
             return Markup.button.callback(e + FLAGS[e], e)
         }), 3)
         ))
@@ -29,7 +29,7 @@ try {
     //HEARS END
 
     //ACTION START
-    bot.action(Object.keys(JC.ReadParsedJson()[0].rates), async (ctx) => {
+    bot.action(Object.keys(JC.ReadParsedJson()?.[0]?.rates || []), async (ctx) => {
         await ctx.editMessageText("Выберите валюту для сравнения 💵", Markup.inlineKeyboard(_.chunk(JC.ReadParsedJson().map(e => {
             return Markup.button.callback(e.base + FLAGS[e.base], e.base + "1" + " " + ctx.update.callback_query.data)
         }), 3)))
