@@ -8,4 +8,4 @@ yarn-error.log*
 
 #LOCAL
 /.env
-ExRate.json
+/json
