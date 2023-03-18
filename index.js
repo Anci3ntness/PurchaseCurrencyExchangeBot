@@ -33,7 +33,7 @@ try {
 
     //ACTION START
     bot.action(Object.keys(JC.ReadParsedJson()?.[0]?.rates || []), async (ctx) => {
-        await ctx.editMessageText("Выберите валюту для сравнения 💵", Markup.inlineKeyboard(_.chunk(JC.ReadParsedJson().map(e => {
+        await ctx.editMessageText(`Вы выбрали ${ctx.update.callback_query.data + FLAGS[ctx.update.callback_query.data]}. Выберите валюту для сравнения 💵`, Markup.inlineKeyboard(_.chunk(JC.ReadParsedJson().map(e => {
             return Markup.button.callback(e.base + FLAGS[e.base], e.base + "1" + " " + ctx.update.callback_query.data)
         }), 3)))
     })
