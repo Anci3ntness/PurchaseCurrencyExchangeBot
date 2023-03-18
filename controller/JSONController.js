@@ -16,7 +16,7 @@ export default class JSONController {
     async WriteParsedJson() {
 
         this.#A_Curr = [
-            // await FH.GetCurrencyBasedOn("RUB"),
+            await FH.GetCurrencyBasedOn("RUB"),
             await FH.GetCurrencyBasedOn("USD"),
             await FH.GetCurrencyBasedOn("EUR"),
             await FH.GetCurrencyBasedOn("JPY"),

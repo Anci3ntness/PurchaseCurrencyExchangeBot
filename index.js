@@ -8,7 +8,10 @@ dotenv.config()
 
 const bot = new Telegraf(process.env.BOT_TOKEN)
 const JC = new JSONController()
-const cronjob = new CronJob("* 18 * * *", () => JC.WriteParsedJson())
+const cronjob = new CronJob("0 18 * * *", () => {
+    console.log("я пидорас")
+    JC.WriteParsedJson()
+})
 cronjob.start()
 
 
