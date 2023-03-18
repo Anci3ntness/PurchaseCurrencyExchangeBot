@@ -48,14 +48,14 @@ export default class JSONController {
         try {
             this.#P_Curr = JSON.parse(fs.readFileSync("./json/ExRate.json", "utf8", (err, text) => {
                 if (err) {
-                    console.error("Ошибка при чтении файла ExRate.\n", err)
+                    console.error("1 Ошибка при чтении файла ExRate.\n", err)
                     return
                 }
                 return text
             }))
             return this.#P_Curr
         } catch (err) {
-            console.error("Ошибка при чтении файла ExRate.\n", err)
+            console.error("2 Ошибка при чтении файла ExRate.\n", err)
         }
 
     }
