@@ -23,23 +23,39 @@ try {
 
     //HEARS START
     bot.hears("Курс валют", async (ctx) => {
-        await ctx.reply("Выберите тип валюты 💶:", Markup.inlineKeyboard(_.chunk(Object.keys(JC.ReadParsedJson()?.[0]?.rates || []).map(e => {
-            return Markup.button.callback(e + FLAGS[e], e)
-        }), 3)
-        ))
+        await ctx.reply("Выберите тип валюты 💶:", Markup.inlineKeyboard(_.chunk(JC.ReadParsedJson().map(e => {
+            return Markup.button.callback(e.base + FLAGS[e.base], e.base)
+        }), 3)))
     })
+
     //HEARS END
 
     //ACTION START
-    bot.action(Object.keys(JC.ReadParsedJson()?.[0]?.rates || []), async (ctx) => {
-        await ctx.editMessageText(`Вы выбрали ${ctx.update.callback_query.data + FLAGS[ctx.update.callback_query.data]}. Выберите валюту для сравнения 💵`, Markup.inlineKeyboard(_.chunk(JC.ReadParsedJson().map(e => {
-            return Markup.button.callback(e.base + FLAGS[e.base], e.base + "1" + " " + ctx.update.callback_query.data)
+    bot.action(JC.ReadParsedJson().map(e => e.base), async (ctx) => {
+        await ctx.editMessageText(`Вы выбрали ${ctx.update.callback_query.data + FLAGS[ctx.update.callback_query.data]}. Выберите валюту для сравнения 💵`, Markup.inlineKeyboard(_.chunk(Object.keys(JC.ReadParsedJson()?.[0]?.rates || []).map(e => {
+            return Markup.button.callback(e + FLAGS[e], e + "1" + " " + ctx.update.callback_query.data)
         }), 3)))
     })
-    bot.action(new RegExp(`\\b(${JC.ReadParsedJson().map(e => e.base + "1").join("|")})\\b`, "g"), async (ctx) => {
-        let base = ctx.update.callback_query.data.replace(/\d/g, "").split(" ")[0]
-        let rate = ctx.update.callback_query.data.replace(/\d/g, "").split(" ")[1]
-        await ctx.editMessageText(`Курс валюты на ${JC.ReadParsedJson().find(f => f.base = base).date}.\n\nКурс ${base}${FLAGS[base] || ""} -> ${rate}${FLAGS[rate] || ""}: 1 к ${JC.ReadParsedJson().find(f => f.base == base).rates[rate]}\n`)
+    bot.action(new RegExp(`\\b(${Object.keys(JC.ReadParsedJson()?.[0]?.rates || []).map(e => e + "1").join("|")})\\b`, "g"), async (ctx) => {
+        let rate = ctx.update.callback_query.data.replace(/\d/g, "").split(" ")[0]
+        let base = ctx.update.callback_query.data.replace(/\d/g, "").split(" ")[1]
+        await ctx.editMessageText(`Курс валюты на ${JC.ReadParsedJson().find(f => f.base = base).date}.\n\nКурс ${base}${FLAGS[base] || ""} -> ${rate}${FLAGS[rate] || ""}: 1 к ${JC.ReadParsedJson().find(f => f.base == base).rates[rate]}\n`, Markup.inlineKeyboard([
+            Markup.button.callback("Поменять местами🔁", `swap,${base},${rate}`)
+        ]))
+    })
+    bot.action(new RegExp(`\\b(swap)\\b`, "g"), async (ctx) => {
+        let base = ctx.update.callback_query.data.split(",")[1]
+        let rate = ctx.update.callback_query.data.split(",")[2]
+        await ctx.editMessageText(`Курс валюты на ${JC.ReadParsedJson().find(f => f.base = base).date}.\n\nКурс ${base}${FLAGS[base] || ""} -> ${rate}${FLAGS[rate] || ""}: 1 к ${(1 / JC.ReadParsedJson().find(f => f.base == base).rates[rate]).toFixed(6).replace(/\.?0*$\b/g, "")}\n`, Markup.inlineKeyboard([
+            Markup.button.callback("Поменять местами🔁", `swap2,${base},${rate}`)
+        ]))
+    })
+    bot.action(new RegExp(`\\b(swap2)\\b`, "g"), async (ctx) => {
+        let base = ctx.update.callback_query.data.split(",")[1]
+        let rate = ctx.update.callback_query.data.split(",")[2]
+        await ctx.editMessageText(`Курс валюты на ${JC.ReadParsedJson().find(f => f.base = base).date}.\n\nКурс ${rate}${FLAGS[rate] || ""} -> ${base}${FLAGS[base] || ""}: 1 к ${JC.ReadParsedJson().find(f => f.base == base).rates[rate]}\n`, Markup.inlineKeyboard([
+            Markup.button.callback("Поменять местами🔁", `swap,${base},${rate}`)
+        ]))
     })
     //ACTION END
 
