@@ -27,6 +27,7 @@ export default class JSONController {
 
         try {
             if (!this.#A_Curr[this.#A_Curr.length - 1].success === true) return
+            if (!fs.existsSync("./json")) fs.mkdirSync("./json")
             fs.writeFile("./json/ExRate.json", JSON.stringify(this.#A_Curr, null, "\t"), err => {
                 if (err) {
                     console.error("Ошибка при создании файла ExRate.\n", err)
