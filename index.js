@@ -46,14 +46,14 @@ try {
     bot.action(new RegExp(`\\b(swap)\\b`, "g"), async (ctx) => {
         let base = ctx.update.callback_query.data.split(",")[1]
         let rate = ctx.update.callback_query.data.split(",")[2]
-        await ctx.editMessageText(`Курс валюты на ${JC.ReadParsedJson().find(f => f.base = base).date}.\n\nКурс ${base}${FLAGS[base] || ""} -> ${rate}${FLAGS[rate] || ""}: 1 к ${(1 / JC.ReadParsedJson().find(f => f.base == base).rates[rate]).toFixed(6).replace(/\.?0*$\b/g, "")}\n`, Markup.inlineKeyboard([
+        await ctx.editMessageText(`Курс валюты на ${JC.ReadParsedJson().find(f => f.base = base).date}.\n\nКурс ${rate}${FLAGS[rate] || ""} -> ${base}${FLAGS[base] || ""}: 1 к ${(1 / JC.ReadParsedJson().find(f => f.base == base).rates[rate]).toFixed(6).replace(/\.?0*$\b/g, "")}\n`, Markup.inlineKeyboard([
             Markup.button.callback("Поменять местами🔁", `swap2,${base},${rate}`)
         ]))
     })
     bot.action(new RegExp(`\\b(swap2)\\b`, "g"), async (ctx) => {
         let base = ctx.update.callback_query.data.split(",")[1]
         let rate = ctx.update.callback_query.data.split(",")[2]
-        await ctx.editMessageText(`Курс валюты на ${JC.ReadParsedJson().find(f => f.base = base).date}.\n\nКурс ${rate}${FLAGS[rate] || ""} -> ${base}${FLAGS[base] || ""}: 1 к ${JC.ReadParsedJson().find(f => f.base == base).rates[rate]}\n`, Markup.inlineKeyboard([
+        await ctx.editMessageText(`Курс валюты на ${JC.ReadParsedJson().find(f => f.base = base).date}.\n\nКурс ${base}${FLAGS[base] || ""} -> ${rate}${FLAGS[rate] || ""}: 1 к ${JC.ReadParsedJson().find(f => f.base == base).rates[rate]}\n`, Markup.inlineKeyboard([
             Markup.button.callback("Поменять местами🔁", `swap,${base},${rate}`)
         ]))
     })
