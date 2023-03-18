@@ -16,7 +16,7 @@ export default class JSONController {
     async WriteParsedJson() {
 
         this.#A_Curr = [
-            await FH.GetCurrencyBasedOn("RUB"),
+            // await FH.GetCurrencyBasedOn("RUB"),
             await FH.GetCurrencyBasedOn("USD"),
             await FH.GetCurrencyBasedOn("EUR"),
             await FH.GetCurrencyBasedOn("JPY"),
@@ -26,16 +26,19 @@ export default class JSONController {
         ]
 
         try {
-            if (!this.#A_Curr[this.#A_Curr.length - 1].success === true) return
+            if (!this.#A_Curr[this.#A_Curr.length - 1].success === true) {
+                console.log("Ошибка при запросе API")
+                return
+            }
             if (!fs.existsSync("./json")) fs.mkdirSync("./json")
             fs.writeFile("./json/ExRate.json", JSON.stringify(this.#A_Curr, null, "\t"), err => {
                 if (err) {
-                    console.error("Ошибка при создании файла ExRate.\n", err)
+                    console.error("1 Ошибка при создании файла ExRate.\n", err)
                     return
                 }
             })
         } catch (err) {
-            console.error("Ошибка при создании файла ExRate.\n", err)
+            console.error("2 Ошибка при создании файла ExRate.\n", err)
         }
 
     }
@@ -46,6 +49,7 @@ export default class JSONController {
     ReadParsedJson() {
         try {
             if (!fs.existsSync("./json/ExRate.json")) {
+                console.log("Файла ExRate не существует. Ожидание создания файла...")
                 this.WriteParsedJson()
             }
             else {
