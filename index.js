@@ -14,7 +14,6 @@ const cronjob = new CronJob("0 18 * * *", () => {
 })
 cronjob.start()
 
-
 try {
     //COMMAND START
     bot.command("start", (ctx) => {
@@ -40,7 +39,7 @@ try {
     bot.action(new RegExp(`\\b(${JC.ReadParsedJson().map(e => e.base + "1").join("|")})\\b`, "g"), async (ctx) => {
         let base = ctx.update.callback_query.data.replace(/\d/g, "").split(" ")[0]
         let rate = ctx.update.callback_query.data.replace(/\d/g, "").split(" ")[1]
-        await ctx.editMessageText(`Курс валюты на ${JC.ReadParsedJson().find(f => f.base = base).date}.\n\nКурс ${rate}${FLAGS[rate] || ""} -> ${base}${FLAGS[base] || ""}: 1 к ${JC.ReadParsedJson().find(f => f.base == base).rates[rate]}\n`)
+        await ctx.editMessageText(`Курс валюты на ${JC.ReadParsedJson().find(f => f.base = base).date}.\n\nКурс ${base}${FLAGS[base] || ""} -> ${rate}${FLAGS[rate] || ""}: 1 к ${JC.ReadParsedJson().find(f => f.base == base).rates[rate]}\n`)
     })
     //ACTION END
 
